@@ -115,7 +115,7 @@ class FoodCaloriesController: UIViewController {
         let buttonYTransformation = createAnimation(key: "position.y",
                                                     fromValue: view.frame.height,
                                                     toValue: view.frame.height - 80,
-                                                    duration: 2)
+                                                    duration: 7)
 
         moreInfoButton.layer.add(buttonYTransformation, forKey: "PositionY")
     }
@@ -130,7 +130,3 @@ class FoodCaloriesController: UIViewController {
         return animation
     }
 }
-
-
-
-
