@@ -218,7 +218,7 @@ extension UIView {
     @discardableResult
     func constrainWidth(to view: UIView, ratio: CGFloat = 1, priority: UILayoutPriority = .required,
                                 isActive: Bool = true) -> NSLayoutConstraint {
-        let constraint = heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ratio)
+        let constraint = widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: ratio)
         constraint.isActive = isActive
         constraint.priority = priority
         return constraint
@@ -228,6 +228,15 @@ extension UIView {
     func constrainWidthToHeight(ratio: CGFloat = 1, priority: UILayoutPriority = .required,
                                 isActive: Bool = true) -> NSLayoutConstraint {
         let constraint = widthAnchor.constraint(equalTo: heightAnchor, multiplier: ratio)
+        constraint.isActive = isActive
+        constraint.priority = priority
+        return constraint
+    }
+
+    @discardableResult
+    func constrainHeight(to view: UIView, ratio: CGFloat = 1, priority: UILayoutPriority = .required,
+                                isActive: Bool = true) -> NSLayoutConstraint {
+        let constraint = heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ratio)
         constraint.isActive = isActive
         constraint.priority = priority
         return constraint
@@ -270,6 +279,7 @@ extension UIView {
 
         backgroundColor = .clear
         gradientLayer.frame = bounds
+        gradientLayer.drawsAsynchronously = true
         layer.insertSublayer(gradientLayer, at: 0)
     }
 

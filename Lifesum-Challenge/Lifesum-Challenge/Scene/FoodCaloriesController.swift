@@ -15,10 +15,6 @@ class FoodCaloriesController: UIViewController {
 
     private var viewModel: FoodCaloriesViewModel!
 
-    private var buttonCenterYConstraint: NSLayoutConstraint?
-
-    private var buttonTopConstraint: NSLayoutConstraint?
-
     private var foodStatView: FoodStatsView = {
         let view = FoodStatsView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -56,11 +52,13 @@ class FoodCaloriesController: UIViewController {
         super.viewDidLoad()
         setupViews()
         bindUI()
+        animateMoreInfoButton()
     }
 
     func setupViews() {
         view.addSubview(foodStatView)
         view.addSubview(moreInfoButton)
+        
         foodStatView.centerHorizontal(with: view)
         foodStatView.centerVertical(with: view)
         foodStatView.constrainWidth(self.view.frame.width * 0.85)
@@ -69,9 +67,7 @@ class FoodCaloriesController: UIViewController {
         moreInfoButton.constrainHeight(70)
         moreInfoButton.constrainWidth(to: foodStatView)
         moreInfoButton.centerHorizontal(with: foodStatView)
-
-        buttonCenterYConstraint = moreInfoButton.centerVertical(with: view)
-
+        moreInfoButton.alignBottom(with: view, constant: -20)
     }
 
     func bindUI() {
@@ -89,28 +85,49 @@ class FoodCaloriesController: UIViewController {
 
         output?.data.asObservable().subscribe(onNext: { info in
             guard let info = info else { return }
-            self.animate()
+            self.animateFoodStatView()
             self.foodStatView.config(model: info)
         })
         .disposed(by: disposeBag)
     }
 
-    func animate() {
-        if let centerY = self.buttonCenterYConstraint {
-            NSLayoutConstraint.deactivate([centerY])
-            self.buttonTopConstraint = moreInfoButton.alignTop(to: foodStatView.bottomAnchor, constant: 20)
-            self.foodStatView.containerStackView.alpha = 1
-        }
+    func animateFoodStatView() {
+        let scale = createAnimation(fromValue: 2,
+                                    toValue: 1,
+                                    duration: 1)
 
-        UIView.animate(withDuration: 1.0,
-                       delay: 0.0,
-                       usingSpringWithDamping: 2,
-                       initialSpringVelocity: 0.5,
-                       options: .curveEaseIn, animations: {
-            self.foodStatView.alpha = 1
-            self.foodStatView.containerStackView.alpha = 1
-            self.foodStatView.layoutIfNeeded()
-        }, completion: nil)
+        let opacity = createAnimation(key: "opacity",
+                                      fromValue: 0.7,
+                                      toValue: 1,
+                                      duration: 1)
+
+        let yTransformation = createAnimation(key: "position.y",
+                                              fromValue: 200,
+                                              toValue: view.center.y,
+                                              duration: 1)
+
+        foodStatView.layer.add(scale, forKey: nil)
+        foodStatView.layer.add(opacity, forKey: nil)
+        foodStatView.layer.add(yTransformation, forKey: nil)
+    }
+
+    func animateMoreInfoButton() {
+        let buttonYTransformation = createAnimation(key: "position.y",
+                                                    fromValue: view.frame.height,
+                                                    toValue: view.frame.height - 80,
+                                                    duration: 2)
+
+        moreInfoButton.layer.add(buttonYTransformation, forKey: "PositionY")
+    }
+
+    func createAnimation(key: String = "transform.scale", fromValue:CGFloat, toValue:CGFloat, duration:CFTimeInterval) -> CASpringAnimation {
+        let animation = CASpringAnimation(keyPath: key)
+        animation.fromValue = fromValue
+        animation.toValue = toValue
+        animation.duration = duration
+        animation.isRemovedOnCompletion = false
+        animation.fillMode = .forwards
+        return animation
     }
 }
 
