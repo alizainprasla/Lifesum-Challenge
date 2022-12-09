@@ -46,7 +46,7 @@ class FoodStatsView: UIView {
         let label = UICountingLabel()
         label.format = "%d"
         label.method = .linear
-        label.animationDuration = 0.2
+        label.animationDuration = 1
         label.setContentHuggingPriority(.defaultHigh, for: .vertical)
         label.font = UIFont(name: "Avenir-Medium", size: 50)
         label.textColor = .white
@@ -80,7 +80,7 @@ class FoodStatsView: UIView {
         let label = UICountingLabel()
         label.format = "%d"
         label.method = .linear
-        label.animationDuration = 0.2
+        label.animationDuration = 1
         label.font = UIFont(name: "Avenir-Light", size: 22)
         label.textAlignment = .center
         label.textColor = .gray
@@ -103,7 +103,7 @@ class FoodStatsView: UIView {
         let label = UICountingLabel()
         label.format = "%d"
         label.method = .linear
-        label.animationDuration = 0.2
+        label.animationDuration = 1
         label.font = UIFont(name: "Avenir-Light", size: 22)
         label.textAlignment = .center
         label.textColor = .gray
@@ -125,7 +125,7 @@ class FoodStatsView: UIView {
         let label = UICountingLabel()
         label.format = "%d"
         label.method = .linear
-        label.animationDuration = 0.2
+        label.animationDuration = 1
         label.font = UIFont(name: "Avenir-Light", size: 22)
         label.textAlignment = .center
         label.textColor = .gray
